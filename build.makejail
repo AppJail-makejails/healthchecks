@@ -1,4 +1,4 @@
 INCLUDE options/options.makejail
 INCLUDE options/volumes.makejail
 
-PKG py311-healthchecks
+PKG py311-healthchecks uwsgi-py311
