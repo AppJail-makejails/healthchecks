@@ -8,7 +8,7 @@ ARG healthchecks_http_socket=0.0.0.0:8823
 FROM --entrypoint "${healthchecks_ajspec}" healthchecks:${healthchecks_tag}
 
 COPY ${healthchecks_uwsgi} /uwsgi.ini
-REPLACE /uwsgi.init HTTP_SOCKET ${healthchecks_http_socket}
+REPLACE /uwsgi.ini HTTP_SOCKET ${healthchecks_http_socket}
 
 COPY scripts
 CMD /scripts/configure.sh
