@@ -1,0 +1,26 @@
+INCLUDE options/options.makejail
+
+ARG healthchecks_tag=%%TAG1%%
+ARG healthchecks_ajspec=gh+AppJail-makejails/healthchecks
+ARG healthchecks_uwsgi=files/uwsgi.ini
+ARG healthchecks_http_socket=0.0.0.0:8823
+
+FROM --entrypoint "${healthchecks_ajspec}" healthchecks:${healthchecks_tag}
+
+COPY ${healthchecks_uwsgi} /uwsgi.ini
+REPLACE /uwsgi.init HTTP_SOCKET ${healthchecks_http_socket}
+
+COPY scripts
+CMD /scripts/configure.sh
+CMD rm -rf /scripts
+
+STOP
+
+STAGE start
+
+RUN daemon \
+      -t "Open-source cron job and background task monitoring service" \
+      -p /var/run/healthchecks.pid \
+      -o /var/log/healthchecks.log \
+      -u healthchecks \
+      uwsgi /uwsgi.ini
