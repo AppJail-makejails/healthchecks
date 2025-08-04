@@ -29,6 +29,13 @@ appjail makejail \
     -V HCKS_EMAIL_USE_VERIFICATION=False
 ```
 
+### Arguments
+
+* `healthchecks_ajspec` (default: `gh+AppJail-makejails/healthchecks`): Entry point where the `appjail-ajspec(5)` file is located.
+* `healthchecks_tag` (default: `%%TAG1%%`): see [#tags](#tags).
+* `healthchecks_uwsgi` (default: `files/uwsgi.ini`): File configuration for uWSGI.
+* `healthchecks_http_socket` (default: `0.0.0.0:8823`): Value of `http-socket` option.
+
 ### Volumes
 
 | Name            | Owner | Group | Perm | Type | Mountpoint |
