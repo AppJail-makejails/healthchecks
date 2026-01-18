@@ -32,7 +32,7 @@ appjail makejail \
 ### Arguments
 
 * `healthchecks_ajspec` (default: `gh+AppJail-makejails/healthchecks`): Entry point where the `appjail-ajspec(5)` file is located.
-* `healthchecks_tag` (default: `13.5`): see [#tags](#tags).
+* `healthchecks_tag` (default: `14.3`): see [#tags](#tags).
 * `healthchecks_uwsgi` (default: `files/uwsgi.ini`): File configuration for uWSGI.
 * `healthchecks_http_socket` (default: `0.0.0.0:8823`): Value of `http-socket` option.
 
@@ -48,5 +48,5 @@ appjail makejail \
 
 | Tag        | Arch     | Version            | Type   |
 | ---------- | -------- | ------------------ | ------ |
-| `13.5` | `amd64`  | `13.5-RELEASE` | `thin` |
 | `14.3` | `amd64`  | `14.3-RELEASE` | `thin` |
+| `15` | `amd64`  | `15` | `thin` |

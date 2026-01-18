@@ -1,6 +1,6 @@
 INCLUDE options/options.makejail
 
-ARG healthchecks_tag=13.5
+ARG healthchecks_tag=14.3
 ARG healthchecks_ajspec=gh+AppJail-makejails/healthchecks
 ARG healthchecks_uwsgi=files/uwsgi.ini
 ARG healthchecks_http_socket=0.0.0.0:8823
@@ -11,7 +11,7 @@ COPY ${healthchecks_uwsgi} /uwsgi.ini
 REPLACE /uwsgi.ini HTTP_SOCKET ${healthchecks_http_socket}
 
 COPY scripts
-RUN /scripts/configure.sh
+CMD /scripts/configure.sh
 CMD rm -rf /scripts
 
 STOP
