@@ -11,7 +11,7 @@ COPY ${healthchecks_uwsgi} /uwsgi.ini
 REPLACE /uwsgi.ini HTTP_SOCKET ${healthchecks_http_socket}
 
 COPY scripts
-CMD /scripts/configure.sh
+RUN /scripts/configure.sh
 CMD rm -rf /scripts
 
 STOP
