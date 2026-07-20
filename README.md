@@ -4,49 +4,61 @@ Healthchecks is a cron job monitoring service. It listens for HTTP requests and 
 
 healthchecks.io
 
-<img src="https://raw.githubusercontent.com/healthchecks/healthchecks/refs/heads/master/static/img/favicon.svg" alt="healthchecks logo" width="30%" height="auto">
+<img src="https://raw.githubusercontent.com/healthchecks/healthchecks/refs/heads/master/static/img/favicon.svg" width="30%" height="auto" alt="Healthchecks logo">
 
 ## How to use this Makejail
 
-```sh
-appjail makejail \
-    -j healthchecks \
-    -f gh+AppJail-makejails/healthchecks \
+```console
+$ mkdir -p /var/appjail-volumes/hcks/data
+$ appjail oci run -Pd \
+    -o fstab="/var/appjail-volumes/hcks/data /data" \
+    -o overwrite=force \
     -o virtualnet=":<random> default" \
     -o nat \
-    -o expose=8823 \
-    -V HCKS_DEBUG=False \
-    -V HCKS_SITE_ROOT=http://healthchecks \
-    -V HCKS_SITE_NAME=healthchecks \
-    -V HCKS_APPRISE_ENABLED=True \
-    -V HCKS_DEFAULT_FROM_EMAIL=hcks@example.org \
-    -V HCKS_SECRET_KEY=mysecretkey \
-    -V HCKS_EMAIL_HOST=example.org \
-    -V HCKS_EMAIL_HOST_PASSWORD=123 \
-    -V HCKS_EMAIL_HOST_USER=hcks \
-    -V HCKS_EMAIL_PORT=1025 \
-    -V HCKS_EMAIL_USE_TLS=False \
-    -V HCKS_EMAIL_USE_VERIFICATION=False
+    -e DEBUG=False \
+    -e ALLOWED_HOSTS=healthchecks \
+    -e SITE_ROOT=http://healthchecks \
+    -e SITE_NAME=healthchecks \
+    -e APPRISE_ENABLED=True \
+    -e DEFAULT_FROM_EMAIL=hcks@example.org \
+    -e SECRET_KEY=mysecretkey \
+    -e EMAIL_HOST=example.org \
+    -e EMAIL_HOST_PASSWORD=123 \
+    -e EMAIL_HOST_USER=hcks \
+    -e EMAIL_PORT=1025 \
+    -e EMAIL_USE_TLS=False \
+    -e EMAIL_USE_VERIFICATION=False \
+    ghcr.io/appjail-makejails/healthchecks healthchecks
 ```
 
-### Arguments
+### Arguments (stage: build)
 
-* `healthchecks_ajspec` (default: `gh+AppJail-makejails/healthchecks`): Entry point where the `appjail-ajspec(5)` file is located.
-* `healthchecks_tag` (default: `14.3`): see [#tags](#tags).
-* `healthchecks_uwsgi` (default: `files/uwsgi.ini`): File configuration for uWSGI.
-* `healthchecks_http_socket` (default: `0.0.0.0:8823`): Value of `http-socket` option.
+* `healthchecks_from` (default: `ghcr.io/appjail-makejails/healthchecks`): Location of OCI image. See also [OCI Configuration](#oci-configuration).
+* `healthchecks_tag` (default: `latest`): OCI image tag. See also [OCI Configuration](#oci-configuration).
+
+### Environment (OCI image)
+
+* `PGID` (default: `1000`): Equivalent to `PUID` but for the Process Group ID.
+* `PUID` (default: `1000`): Process User ID for the container's main process, allowing you to match the owner of files written to mounted host volumes to your host system's user. Writable volumes are changed based on this environment variable.
 
 ### Volumes
 
-| Name            | Owner | Group | Perm | Type | Mountpoint |
-| --------------- | ----- | ----- | ---- | ---- | ---------- |
-| hcks-data       | 790   | 790   | -    | -    | /data      |
+| Name | Owner | Group | Perm | Type | Mountpoint |
+| --- | --- | --- | --- | --- | --- |
+| appjail-263aca83a3-data | `${PUID}` | `${PGID}` | - | - | /data |
 
-**Note**: The `hcks-data` volume is only necessary if you use SQLite as your database engine (which is the default).
+## OCI Configuration
 
-## Tags
-
-| Tag        | Arch     | Version            | Type   |
-| ---------- | -------- | ------------------ | ------ |
-| `14.3` | `amd64`  | `14.3-RELEASE` | `thin` |
-| `15` | `amd64`  | `15` | `thin` |
+```yaml
+build:
+  variants:
+    - tag: 15.1
+      containerfile: Containerfile
+      aliases: ["latest"]
+      default: true
+      args:
+        FREEBSD_RELEASE: "15.1"
+        PYVER: "312"
+        NO_PKGCLEAN: "1"
+      cache_dirs: ["pkgcache0:/var/cache/pkg"]
+```
