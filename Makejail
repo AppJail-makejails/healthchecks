@@ -1,5 +1,6 @@
 ARG healthchecks_from=ghcr.io/appjail-makejails/healthchecks
 ARG healthchecks_tag=latest
 
+OPTION container=boot
 OPTION overwrite=force
 OPTION from=${healthchecks_from}:${healthchecks_tag}
