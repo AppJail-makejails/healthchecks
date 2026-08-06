@@ -7,6 +7,6 @@ set -e
 create_user
 
 chown noroot:noroot /var/db/healthchecks
-chown -R noroot:noroot /data
+change_owner /data
 
 exec su-exec noroot uwsgi /uwsgi.ini
