@@ -15,7 +15,7 @@ LABEL org.opencontainers.image.title="Healthchecks" \
 RUN set -xe; \
     \
     pkg update; \
-    pkg install -U py${PYVER}-healthchecks uwsgi-py${PYVER}; \
+    pkg install py${PYVER}-healthchecks uwsgi-py${PYVER}; \
     \
     if [ -z "${NO_PKGCLEAN}" ]; then \
         pkg clean -a; \
